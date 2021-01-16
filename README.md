@@ -10,8 +10,10 @@ Basic implemention of warehousing software
    - [x] article
    - [x] product
 - [ ] models
+   - [ ] factories
 - [ ] controllers
 - [ ] load inventory from file
+   - [ ] as a rake task
 - [ ] implement endpoints 
 - [ ] host
 - [ ] document 
