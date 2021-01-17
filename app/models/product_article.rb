@@ -3,7 +3,7 @@ class ProductArticle < ApplicationRecord
   belongs_to :article
   validates_presence_of :quantity
 
-  def available?
-    quantity <= article.quantity
+  def stock_available_for_products
+    article.quantity / quantity
   end
 end

@@ -5,16 +5,9 @@ class Product < ApplicationRecord
   validates_presence_of :name
   validates_uniqueness_of :name
   
-  attribute :available, :boolean
+  attribute :quantity_available, :integer
   
-  def available?
-    product_articles.each do |product_article|
-      return false unless product_article.available?
-    end
-    true
-  end
-
-  def available
-    available?
+  def quantity_available
+    product_articles.map(&:stock_available_for_products).min
   end
 end

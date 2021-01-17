@@ -4,8 +4,8 @@ RSpec.describe Product, type: :model do
   it { should have_many(:articles) }
   it { should validate_presence_of(:name) }
   it { should validate_uniqueness_of(:name) }
-
-  describe '#available?' do
+    
+  describe '#quantity_available' do
     let!(:product) { FactoryBot.create(:product, name: 'Dining Chair') }
 
     before do
@@ -19,8 +19,8 @@ RSpec.describe Product, type: :model do
       let!(:article2) { FactoryBot.create(:article, name: 'Screw', quantity: 17) }
       let!(:article3) { FactoryBot.create(:article, name: 'Seat', quantity: 2) }
 
-      it 'shows product is available' do
-        expect(product.available?).to be true
+      it 'a quantity of 2 is available' do
+        expect(product.quantity_available).to eq 2
       end
     end
 
@@ -29,8 +29,8 @@ RSpec.describe Product, type: :model do
       let!(:article2) { FactoryBot.create(:article, name: 'Screw', quantity: 17) }
       let!(:article3) { FactoryBot.create(:article, name: 'Seat', quantity: 2) }
 
-      it 'shows product is unavailable' do
-        expect(product.available?).to be false
+      it 'a quanitity of 0 is available' do
+        expect(product.quantity_available).to eq 0
       end
     end
   end

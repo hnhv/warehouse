@@ -30,9 +30,8 @@ RSpec.describe 'Products API', type: :request do
         expect(response).to have_http_status(200)
       end
 
-      it 'has property available' do
-        expect(json).to have_key 'available'
-        expect(json['available']).to be(true).or be(false)
+      it 'has property quantity_available' do
+        expect(json).to have_key 'quantity_available'
       end
     end
 
