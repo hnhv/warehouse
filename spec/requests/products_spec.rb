@@ -47,4 +47,46 @@ RSpec.describe 'Products API', type: :request do
       end
     end
   end
+
+  describe 'POST /products/:id/remove' do
+    let!(:product) { FactoryBot.create(:product, name: 'Dining Chair') }
+
+    before do
+      FactoryBot.create(:product_article, product: product, article: article1, quantity: 4)
+      FactoryBot.create(:product_article, product: product, article: article2, quantity: 8)
+      FactoryBot.create(:product_article, product: product, article: article3, quantity: 1)
+    end
+
+    context 'when sufficient stock is available' do
+      let!(:article1) { FactoryBot.create(:article, name: 'Leg', quantity: 12) }
+      let!(:article2) { FactoryBot.create(:article, name: 'Screw', quantity: 17) }
+      let!(:article3) { FactoryBot.create(:article, name: 'Seat', quantity: 2) }
+
+      let!(:original_quanitity_available) { product.quantity_available }
+
+      it 'returns status code 200, reduces quantity by 1' do
+        post "/products/#{product.id}/remove"
+        expect(response).to have_http_status(200)
+        expect(product.reload.quantity_available).to eq(original_quanitity_available - 1)
+      end
+    end
+
+    context 'when sufficient stock is not available' do
+      let!(:article1) { FactoryBot.create(:article, name: 'Leg', quantity: 12) }
+      let!(:article2) { FactoryBot.create(:article, name: 'Screw', quantity: 2) }
+      let!(:article3) { FactoryBot.create(:article, name: 'Seat', quantity: 2) }
+
+      before do
+        post "/products/#{product.id}/remove"
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(409)
+      end
+
+      it 'returns a insufficient stock message' do
+        expect(response.body).to include('Insufficient stock available')
+      end
+    end
+  end
 end

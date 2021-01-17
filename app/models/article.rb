@@ -3,8 +3,8 @@ class Article < ApplicationRecord
   has_many :products, through: :product_articles
   validates_presence_of :name, :quantity
 
-  def remove_stock!(amount)
-    self.quantity -= amount
+  def remove_stock!(quantity)
+    self.quantity -= quantity
     save!
   end
 end

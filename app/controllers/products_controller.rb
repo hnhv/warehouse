@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show]
+  before_action :set_product, only: [:show, :remove]
 
   # GET /products
   def index
@@ -9,6 +9,12 @@ class ProductsController < ApplicationController
 
   # GET /products/:id
   def show
+    json_response(@product)
+  end
+
+  # POST /products/:id/remove
+  def remove
+    @product.remove!
     json_response(@product)
   end
 
