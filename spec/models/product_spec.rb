@@ -12,7 +12,7 @@ RSpec.describe Product, type: :model do
       FactoryBot.create(:product_article, product: product, article: article1, quantity: 4)
       FactoryBot.create(:product_article, product: product, article: article2, quantity: 8)
       FactoryBot.create(:product_article, product: product, article: article3, quantity: 1)
-    end    
+    end
 
     context 'all articles for product are availalbe' do
       let!(:article1) { FactoryBot.create(:article, name: 'Leg', quantity: 12) }
@@ -20,7 +20,7 @@ RSpec.describe Product, type: :model do
       let!(:article3) { FactoryBot.create(:article, name: 'Seat', quantity: 2) }
 
       it 'shows product is available' do
-        expect(product.available?).to be true 
+        expect(product.available?).to be true
       end
     end
 
@@ -30,7 +30,7 @@ RSpec.describe Product, type: :model do
       let!(:article3) { FactoryBot.create(:article, name: 'Seat', quantity: 2) }
 
       it 'shows product is unavailable' do
-        expect(product.available?).to be false 
+        expect(product.available?).to be false
       end
     end
   end
