@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Product, type: :model do
-  it { should have_and_belong_to_many(:articles) }
+  it { should have_many(:articles) }
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:price) }
 end
