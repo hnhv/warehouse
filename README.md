@@ -1,35 +1,141 @@
 # warehouse
-Basic implemention of warehousing software
 
-## This is the start
+## Table of contents
+* [Introduction](#introduction)
+* [Setup](#setup)
+* [Usage](#usage)
+* [Questions](#questions)
 
-## to do 
-- [x] git repo
-- [x] rails init (api only)
-- [x] db migrations:
-   - [x] article
-   - [x] product
-- [ ] models
-   - [ ] factories
-- [ ] controllers
-- [ ] load inventory from file
-   - [ ] as a rake task
-- [ ] implement endpoints 
-- [ ] host
-- [ ] document 
+	
+## Introduction
+This is a basic implementation of warehousing software built in Ruby on Rails. This uses an SQLite database and exposes an RESTful JSON API for interacting with the warehouse. 
 
-# Code Assignment
+The features are limited but in this version, you can: 
+ - Import the Inventory and Products from a file
+ - View all Products and their available quantity based on articles in the warehouse
+ - The ability to remove a product from the warehouse
+	
+## Setup
+To run this app you will need Ruby [2.7.2](https://www.ruby-lang.org/en/downloads/). 
 
-## Intro
-This assignment will be used as a discussion during a technical interview.
-The primary values for the code we look for are: simplicity, readability, maintainability, testability. It should be easy to scan the code, and rather quickly understand what it’s doing. Pay attention to naming.
- 
-You may choose any coding language, and we look forward to discussing your choice.
+* Install dependencies
 
-## The Task
-The assignment is to implement a warehouse software. This software should hold articles, and the articles should contain an identification number, a name and available stock. It should be possible to load articles into the software from a file, see the attached inventory.json.
-The warehouse software should also have products, products are made of different articles. Products should have a name, price and a list of articles of which they are made from with a quantity. The products should also be loaded from a file, see the attached products.json. 
- 
-The warehouse should have at least the following functionality;
-* Get all products and quantity of each that is an available with the current inventory
-* Remove(Sell) a product and update the inventory accordingly
+We're using [Bundler](https://bundler.io/) as a dependency manager.
+
+```bash
+gem install bundler
+bundle install
+```
+
+* Migrate the database 
+```bash
+bundle exec rake db:create
+bundle exec rake db:migrate
+```
+
+* Run Server
+
+```bash
+bundle exec rails s
+```
+
+* To Drop and Recreate the db
+
+```bash
+bundle exec rake db:drop
+bundle exec rake db:create
+bundle exec rake db:migrate
+```
+
+## Testing
+
+To run the automated tests:
+
+```bash
+bundle exec rspec
+```
+
+## Usage
+
+### Importing an Inventory and Products
+
+2 [Rake](https://github.com/ruby/rake) tasks exist for this purpose. As a parameter provide a path to the file. 
+
+#### Importing the inventory 
+```bash
+rake import:inventory["lib/inventory.json"]
+```
+#### Importing the products
+
+```bash
+bundle exec rake import:products["lib/products.json"]
+```
+
+### API 
+
+#### GET /products
+
+Get all products including quantity available. 
+
+Success response (Status code: 200)
+```json
+[
+    {
+        "id": 1,
+        "name": "Dining Chair",
+        "price": null,
+        "created_at": "2021-01-17T14:41:38.985Z",
+        "updated_at": "2021-01-17T14:41:38.985Z",
+        "quantity_available": 2
+    },
+    {
+        "id": 2,
+        "name": "Dinning Table",
+        "price": null,
+        "created_at": "2021-01-17T14:41:39.059Z",
+        "updated_at": "2021-01-17T14:41:39.059Z",
+        "quantity_available": 1
+    }
+]
+```
+
+#### GET /products/:id
+
+Returns a product details
+
+Success response (Status code: 200)
+```json
+{
+    "id": 2,
+    "name": "Dinning Table",
+    "price": null,
+    "created_at": "2021-01-17T14:41:39.059Z",
+    "updated_at": "2021-01-17T14:41:39.059Z",
+    "quantity_available": 1
+}
+```
+
+#### POST /products/:id/remove
+Remove a product from the warehouse. Will respond with the updated product details including the new available quantity. 
+
+Success response (Status code: 200)
+```json
+{
+    "id": 2,
+    "name": "Dinning Table",
+    "price": null,
+    "created_at": "2021-01-17T14:41:39.059Z",
+    "updated_at": "2021-01-17T14:41:39.059Z",
+    "quantity_available": 0
+}
+```
+Bad response: no stock available (status code: 409):
+```json
+{
+    "message": "Insufficient stock available"
+}
+```
+
+## Questions 
+
+Email me on [heinvogel@gmail.com](mailto:heinvogel@gmail.com)
