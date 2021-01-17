@@ -10,4 +10,13 @@ class Product < ApplicationRecord
   def quantity_available
     product_articles.map(&:stock_available_for_products).min
   end
+
+  def remove!
+    raise InsufficientStock unless quantity_available > 0
+    product_articles.each do |product_article|
+      product_article.article.remove_stock!(product_article.quantity)    
+    end
+  end
+
+  class InsufficientStock < StandardError; end
 end
