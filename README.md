@@ -63,7 +63,7 @@ bundle exec rspec
 
 #### Importing the inventory 
 ```bash
-rake import:inventory["lib/inventory.json"]
+bundle exec rake import:inventory["lib/inventory.json"]
 ```
 #### Importing the products
 
