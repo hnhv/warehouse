@@ -9,22 +9,20 @@ RSpec.describe ProductArticle, type: :model do
     let(:product) { FactoryBot.create(:product, name: 'Dining Chair') }
     let(:product_article) { FactoryBot.create(:product_article, product: product, article: article1, quantity: 4) }
 
-    context 'enough articles are available' do
+    context 'sufficient quantity of article available for a product' do
       let!(:article1) { FactoryBot.create(:article, name: 'Leg', quantity: 14) }
 
-      it 'shows product_article as available' do
+      it 'returns the amount of product that could be suplied with the article' do
         expect(product_article.stock_available_for_products).to eq 3
       end
     end
 
-    context 'not enough articles are available' do
+    context 'insufficient quanitity of article available' do
       let!(:article1) { FactoryBot.create(:article, name: 'Leg', quantity: 2) }
 
-      it 'shows product_article as available' do
+      it 'returns none' do
         expect(product_article.stock_available_for_products).to eq 0
       end
     end
-
-  
   end
 end

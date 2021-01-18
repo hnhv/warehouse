@@ -14,12 +14,12 @@ RSpec.describe Product, type: :model do
       FactoryBot.create(:product_article, product: product, article: article3, quantity: 1)
     end
 
-    context 'all articles for product are availalbe' do
+    context 'sufficient quantity of all articles for product are availalbe' do
       let!(:article1) { FactoryBot.create(:article, name: 'Leg', quantity: 12) }
       let!(:article2) { FactoryBot.create(:article, name: 'Screw', quantity: 17) }
       let!(:article3) { FactoryBot.create(:article, name: 'Seat', quantity: 2) }
 
-      it 'a quantity of 2 is available' do
+      it 'returns quantity of products that can be suplied' do
         expect(product.quantity_available).to eq 2
       end
     end
@@ -29,7 +29,7 @@ RSpec.describe Product, type: :model do
       let!(:article2) { FactoryBot.create(:article, name: 'Screw', quantity: 17) }
       let!(:article3) { FactoryBot.create(:article, name: 'Seat', quantity: 2) }
 
-      it 'a quanitity of 0 is available' do
+      it 'returns quanitity of 0' do
         expect(product.quantity_available).to eq 0
       end
     end
@@ -65,7 +65,7 @@ RSpec.describe Product, type: :model do
       let!(:article2) { FactoryBot.create(:article, name: 'Screw', quantity: 17) }
       let!(:article3) { FactoryBot.create(:article, name: 'Seat', quantity: 2) }
 
-      it 'will raise an exception' do
+      it 'raises an exception' do
         expect { product.remove! }.to raise_error(Product::InsufficientStock)
       end
     end
